@@ -27,12 +27,13 @@ public class BGCurrency {
                 return c;
             }).collect(Collectors.toList());
             rateExchangeRepository.saveAll(exchanges);
+        } else {
+            List<RateExchange> exchanges = exchangeCurrency.stream().map(c -> {
+                c.setSecondValue(c.getSecondValue().divide(BigDecimal.valueOf(1.005), MathContext.DECIMAL32));
+                return c;
+            }).collect(Collectors.toList());
+            rateExchangeRepository.saveAll(exchanges);
         }
-        List<RateExchange> exchanges = exchangeCurrency.stream().map(c -> {
-            c.setSecondValue(c.getSecondValue().divide(BigDecimal.valueOf(1.005), MathContext.DECIMAL32));
-            return c;
-        }).collect(Collectors.toList());
-        rateExchangeRepository.saveAll(exchanges);
     }
 
     private boolean getRandomBoolean() {
